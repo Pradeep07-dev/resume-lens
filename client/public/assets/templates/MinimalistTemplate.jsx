@@ -1,4 +1,4 @@
-const MinimalTemplate = ({ data, accentColor }) => {
+const MinimalistTemplate = ({ data, accentColor }) => {
   const formatDate = (dateStr) => {
     if (!dateStr) return "";
     const [year, month] = dateStr.split("-");
@@ -9,16 +9,15 @@ const MinimalTemplate = ({ data, accentColor }) => {
   };
 
   return (
-    <div className="max-w-4xl mx-auto p-7 bg-white text-gray-900 font-light">
-      <header className="mb-1">
-        <h1 className="text-4xl font-thin mb-1 tracking-wide">
+    <div className="max-w-4xl mx-auto p-7 bg-white text-gray-800 leading-relaxed">
+      <header className="text-center mb-1">
+        <h1 className="text-3xl font-light" style={{ color: accentColor }}>
           {data.personal_info?.full_name || "Your Name"}
         </h1>
-        <p className="uppercase text-gray-700 font-medium text-sm tracking-widest">
-          {data?.personal_info?.profession || ""}
+        <p className="text-sm text-zinc-600">
+          {data.personal_info?.profession || ""}
         </p>
-
-        <div className="flex flex-wrap gap-2 text-sm text-gray-600">
+        <div className="flex flex-wrap justify-center gap-1.5 text-gray-600 text-sm">
           {data.personal_info?.email && (
             <a target="_blank" href={`mailto:${data.personal_info?.email}`}>
               <span>{data.personal_info.email}</span>
@@ -79,43 +78,44 @@ const MinimalTemplate = ({ data, accentColor }) => {
         </div>
       </header>
 
-      {data.professional_summary && (
-        <section className="mb-1">
-          <h2
-            className="text-sm uppercase tracking-widest font-medium"
-            style={{ color: accentColor }}
-          >
-            Summary
-          </h2>
-          <p className=" text-gray-700">{data.professional_summary}</p>
-        </section>
-      )}
+      <section className="mb-1">
+        {data.professional_summary && (
+          <>
+            <h2
+              className="font-semibold uppercase"
+              style={{ color: accentColor }}
+            >
+              Professional Summary
+            </h2>
+            <p className="text-gray-700 text-sm">{data.professional_summary}</p>
+          </>
+        )}
+      </section>
 
       {data.experience && data.experience.length > 0 && (
         <section className="mb-1">
           <h2
-            className="text-sm uppercase tracking-widest font-medium"
+            className="font-semibold uppercase"
             style={{ color: accentColor }}
           >
-            Experience
+            Professional Experience
           </h2>
-
-          <div className="space-y-2">
-            {data.experience.map((exp, index) => (
-              <div key={index}>
-                <div className="flex justify-between items-baseline">
-                  <h3 className="font-medium">{exp.position}</h3>
-                  <span className="text-gray-500">
-                    {formatDate(exp.start_date)} -{" "}
-                    {exp.is_current ? "Present" : formatDate(exp.end_date)}
-                  </span>
-                </div>
-                <p className="text-gray-600 text-xs">{exp.company}</p>
-                {exp.description && (
-                  <div className="text-gray-700 leading-relaxed whitespace-pre-line text-sm">
-                    {exp.description}
+          <div className="space-y-1">
+            {data.experience.map((exp, idx) => (
+              <div>
+                <div key={idx} className="flex justify-between items-start">
+                  <div>
+                    <h3 className="font-medium">{exp.position}</h3>
+                    <p className="text-gray-600 text-sm">{exp.company}</p>
                   </div>
-                )}
+                  <div className="text-gray-500 text-sm">
+                    <p>
+                      {formatDate(exp.start_date)} -{" "}
+                      {exp.is_current ? "Present" : formatDate(exp.end_date)}
+                    </p>
+                  </div>
+                </div>
+                <p className="text-gray-700 text-sm">{exp.description}</p>
               </div>
             ))}
           </div>
@@ -125,64 +125,57 @@ const MinimalTemplate = ({ data, accentColor }) => {
       {data.project && data.project.length > 0 && (
         <section className="mb-1">
           <h2
-            className="text-sm uppercase tracking-widest font-medium"
+            className="text-sm font-semibold uppercase"
             style={{ color: accentColor }}
           >
             Projects
           </h2>
-
-          <div className="space-y-1">
-            {data.project.map((proj, index) => (
-              <div
-                key={index}
-                className="flex flex-col justify-between items-baseline"
-              >
-                <h3 className="font-medium flex items-center gap-1">
-                  {proj.name}
-                  {proj.link && (
+          <ul className="space-y-1">
+            {data.project.map((p, i) => (
+              <li key={i}>
+                <div className="font-medium flex items-center gap-1">
+                  {p.name}
+                  {p.link && (
                     <span className="text-gray-600 font-normal cursor-pointer">
                       <a
-                        href={proj.link}
+                        href={p.link}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="inline-flex items-center cursor-pointer"
+                        className="inline-flex items-center"
                       >
                         Link
                       </a>
                     </span>
                   )}
-                </h3>
-                <p className="text-gray-600 text-sm">{proj.description}</p>
-              </div>
+                </div>
+                <div className="text-sm text-gray-600">{p.description}</div>
+              </li>
             ))}
-          </div>
+          </ul>
         </section>
       )}
 
       {data.education && data.education.length > 0 && (
         <section className="mb-1">
           <h2
-            className="text-sm uppercase tracking-widest font-medium"
+            className="text-sm font-semibold uppercase"
             style={{ color: accentColor }}
           >
             Education
           </h2>
-
           <div className="space-y-1">
-            {data.education.map((edu, index) => (
-              <div key={index} className="flex justify-between items-baseline">
+            {data.education.map((edu, i) => (
+              <div key={i} className="flex justify-between items-start">
                 <div>
-                  <h3 className="font-medium">
-                    {edu.degree} {edu.field && `in ${edu.field}`}
-                  </h3>
-                  <p className="text-gray-600 text-sm">{edu.institution}</p>
-                  {edu.gpa && (
-                    <p className="text-sm text-gray-500">GPA: {edu.gpa}</p>
-                  )}
+                  <div className="font-medium">
+                    {edu.degree}
+                    {edu.field ? ` in ${edu.field}` : ""}
+                  </div>
+                  <div className="text-sm text-gray-600">{edu.institution}</div>
                 </div>
-                <span className="text-sm text-gray-500">
+                <div className="text-sm text-gray-500">
                   {formatDate(edu.graduation_date)}
-                </span>
+                </div>
               </div>
             ))}
           </div>
@@ -192,23 +185,28 @@ const MinimalTemplate = ({ data, accentColor }) => {
       {data.skills && data.skills.length > 0 && (
         <section className="mb-1">
           <h2
-            className="text-sm uppercase tracking-widest font-medium"
+            className="text-sm font-semibold uppercase"
             style={{ color: accentColor }}
           >
-            Skills
+            Core Skills
           </h2>
-
-          <div className="text-gray-700 text-sm">{data.skills.join(" • ")}</div>
+          <div className="flex flex-wrap gap-1 text-sm text-gray-700">
+            {data.skills.map((s, idx) => (
+              <div key={idx} className="px-2 py-0.5 border rounded">
+                {s}
+              </div>
+            ))}
+          </div>
         </section>
       )}
 
       {data.certification && data.certification.length > 0 && (
         <section>
           <h2
-            className="text-sm uppercase tracking-widest font-semibold"
+            className="text-sm font-semibold uppercase"
             style={{ color: accentColor }}
           >
-            CERTIFICATIONS
+            Certifications
           </h2>
 
           <div className="space-y-1">
@@ -219,12 +217,10 @@ const MinimalTemplate = ({ data, accentColor }) => {
                     <div className="flex justify-between items-start">
                       <h3 className="leading-tight">
                         {cert.credential_url ? (
-                          <div className="flex items-center font-normal">
+                          <div className="flex items-center text-gray-900 font-medium">
                             {cert.certificate_name}
 
-                            <p className="text-sm text-gray-900 italic mx-1">
-                              {cert.issuer}
-                            </p>
+                            <p className="text-sm italic mx-1">{cert.issuer}</p>
                             <a
                               href={cert.credential_url}
                               target="_blank"
@@ -237,12 +233,13 @@ const MinimalTemplate = ({ data, accentColor }) => {
                           cert.certificate_name
                         )}
                       </h3>
-                      <p className="text-gray-500 shrink-0 text-sm">
+                      <p className="text-gray-600 shrink-0 text-sm">
                         {formatDate(cert.issue_date)}
                       </p>
                     </div>
+
                     {cert.description && (
-                      <p className="text-gray-700 leading-relaxed text-sm">
+                      <p className="text-gray-500 leading-relaxed text-sm">
                         {cert.description}
                       </p>
                     )}
@@ -257,4 +254,4 @@ const MinimalTemplate = ({ data, accentColor }) => {
   );
 };
 
-export default MinimalTemplate;
+export default MinimalistTemplate;

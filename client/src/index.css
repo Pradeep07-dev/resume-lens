@@ -36,17 +36,17 @@ h2 {
 label {
   @apply text-dark-200;
 }
-input {
+/* input {
   @apply w-full p-4 inset-shadow rounded-2xl focus:outline-none bg-white;
-}
+} */
 
 textarea {
   @apply w-full p-4 inset-shadow rounded-2xl focus:outline-none bg-white;
 }
 
-form {
+/* form {
   @apply flex flex-col items-start gap-8 w-full;
-}
+} */
 
 @layer components {
   .text-gradient {
@@ -112,6 +112,20 @@ form {
   }
   .uploader-selected-file {
     @apply flex items-center justify-between p-3 bg-gray-50 rounded-2xl;
+  }
+}
+
+@layer base {
+  button {
+    @apply cursor-pointer;
+  }
+
+  input:not([type="checkbox"]) {
+    @apply outline-none focus:ring border border-gray-300 focus:ring-blue-500 focus:border-blue-500 rounded-lg text-gray-700;
+  }
+
+  textarea {
+    @apply outline-none focus:ring border border-gray-300 focus:ring-blue-500 focus:border-blue-500 resize-none;
   }
 }
 
