@@ -1,9 +1,18 @@
 import React from "react";
+import Hero from "../components/home/Hero";
+import Features from "../components/home/Features";
+import Testimonials from "../components/home/Testimonials";
+import CallToAction from "../components/home/CallToAction";
+import Footer from "../components/home/Footer";
 
 const Home = () => {
   return (
-    <div>
-      <h1>Home</h1>
+    <div className="w-full overflow-x-hidden">
+      <Hero />
+      <Features />
+      <Testimonials />
+      <CallToAction />
+      <Footer />
     </div>
   );
 };
