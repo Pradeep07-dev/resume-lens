@@ -5,12 +5,11 @@ import Loader from "../components/Loader";
 import Login from "./Login";
 
 const Layout = () => {
-  // const { user, loading } = useSelector((state) => state.auth);
-  const { user } = "woih";
+  const { user, loading } = useSelector((state) => state.auth);
 
-  // if (loading) {
-  //   return <Loader />;
-  // }
+  if (loading) {
+    return <Loader />;
+  }
 
   return (
     <div>
