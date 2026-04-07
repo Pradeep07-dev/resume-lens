@@ -30,7 +30,7 @@ const Login = () => {
 
       toast.success(data.message);
     } catch (error) {
-      toast(error?.response?.data?.message || error.message);
+      toast.error(error?.response?.data?.message || error.message);
     }
   };
 
