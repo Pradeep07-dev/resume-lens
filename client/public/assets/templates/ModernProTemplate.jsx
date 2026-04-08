@@ -391,7 +391,6 @@ const ModernProTemplate = ({ data, accentColor }) => {
 
               {(() => {
                 const allCategorizedKeywords = [
-                  // Front-End
                   "react",
                   "javascript",
                   "html",
@@ -399,7 +398,7 @@ const ModernProTemplate = ({ data, accentColor }) => {
                   "typescript",
                   "angular",
                   "vue",
-                  // Back-End / Databases
+
                   "node",
                   "express",
                   "nest",
@@ -412,7 +411,7 @@ const ModernProTemplate = ({ data, accentColor }) => {
                   "mysql",
                   "postgresql",
                   "mongodb",
-                  // DevOps / Cloud
+
                   "aws",
                   "azure",
                   "docker",
@@ -427,7 +426,7 @@ const ModernProTemplate = ({ data, accentColor }) => {
                   "ci/cd",
                   "deployment",
                   "cicd",
-                  // Generic development/methodology terms that should be filtered out
+
                   "development",
                   "architecture",
                   "methodologies",

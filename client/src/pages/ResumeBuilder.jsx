@@ -98,14 +98,24 @@ const ResumeBuilder = () => {
     }
   };
 
-  const handleShare = () => {
+  const handleShare = async () => {
     const frontendUrl = window.location.href.split("/app/")[0];
     const resumeUrl = frontendUrl + "/view/" + resumeId;
 
+    if (navigator.clipboard) {
+      try {
+        await navigator.clipboard.writeText(resumeUrl);
+        toast.success("Link copied to clipboard!");
+        return;
+      } catch (err) {
+        console.error("Clipboard failed:", err);
+      }
+    }
+
     if (navigator.share) {
-      navigator.share({ url: resumeUrl, text: "My Resume" });
+      navigator.share({ url: resumeUrl, title: "My Resume" });
     } else {
-      alert("Share not supported on this borwser.");
+      toast.error("Could not copy link. URL: " + resumeUrl);
     }
   };
 
