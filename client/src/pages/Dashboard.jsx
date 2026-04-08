@@ -14,7 +14,6 @@ import { useSelector } from "react-redux";
 import api from "../configs/api.js";
 import toast from "react-hot-toast";
 import pdfToText from "../components/ExtractPdfText.jsx";
-console.log("PdfToText: ", pdfToText);
 
 const Dashboard = () => {
   const [allResumes, setAllResumes] = useState([]);
@@ -70,14 +69,12 @@ const Dashboard = () => {
         { title, resumeText },
         { headers: { Authorization: token } }
       );
-      console.log("Up Data: ", data);
       setTitle("");
       setResume(null);
       setShowUploadResume(false);
       navigate(`/app/builder/${data.resumeId}`);
     } catch (error) {
       toast.error(error?.response?.data?.message || error.message);
-      console.log("Upload Resume: ", error?.response?.data?.message);
     }
     setIsLoading(false);
   };
