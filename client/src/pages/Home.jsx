@@ -9,10 +9,6 @@ const Home = () => {
   return (
     <div className="w-full overflow-x-hidden">
       <Hero />
-      <Features />
-      <Testimonials />
-      <CallToAction />
-      <Footer />
     </div>
   );
 };
