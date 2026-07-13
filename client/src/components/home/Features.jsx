@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Zap, ScanText, BadgeCheck, FileDown } from "lucide-react";
+import Title from "./Title";
 
 const Features = () => {
   const [isHover, setIsHover] = useState(false);
@@ -13,14 +14,10 @@ const Features = () => {
         <span>Simple Process</span>
       </div>
 
-      <div className="text-center mt-6 text-slate-700">
-        <h2 className="text-3xl sm:text-4xl font-medium">Build your resume</h2>
-        <p className="max-sm max-w-2xl mt-4 text-slate-500">
-          Our streamlined process helps you create a professional resume in
-          minutes with intelligent AI-powered tools and features.
-        </p>
-      </div>
-
+      <Title
+        title="Build your resume"
+        description="Our streamlined process helps you create a professional resume in minutes with intelligent AI-powered tools and features."
+      />
       <div className="flex flex-col md:flex-row items-center justify-center xl:-mt-10">
         <img
           className="max-w-2xl w-full xl:-ml-32"
