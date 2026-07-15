@@ -78,4 +78,29 @@ textarea {
   .resume-card-header {
     @apply flex flex-row gap-2 justify-between min-h-[110px] max-sm:flex-col items-center max-md:justify-center max-md:items-center;
   }
+
+  .form-div {
+    @apply flex flex-col gap-2 w-full items-start;
+  }
+
+  .uplader-drag-area {
+    @apply relative p-8 text-center transition-all duration-700 cursor-pointer bg-white rounded-2xl min-h-[208px];
+  }
+  .uploader-selected-file {
+    @apply flex items-center justify-between p-3 bg-gray-50 rounded-2xl;
+  }
+}
+
+@layer base {
+  button {
+    @apply cursor-pointer;
+  }
+
+  input:not([type="checkbox"]) {
+    @apply outline-none focus:ring border border-gray-300 focus:ring-blue-500 focus:border-blue-500 rounded-lg text-gray-700;
+  }
+
+  textarea {
+    @apply outline-none focus:ring border border-gray-300 focus:ring-blue-500 focus:border-blue-500 resize-none;
+  }
 }
