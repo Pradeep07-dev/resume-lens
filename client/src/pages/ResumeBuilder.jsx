@@ -16,6 +16,7 @@ import {
   User,
   Award,
 } from "lucide-react";
+import PersonalInfoForm from "../components/PersonalInfoForm";
 
 const ResumeBuilder = () => {
   const [resumeData, setResumeData] = useState({
@@ -55,6 +56,28 @@ const ResumeBuilder = () => {
         >
           <ArrowLeftIcon className="size-4" /> Back to Dashboard
         </Link>
+      </div>
+
+      <div className="max-w-7xl mx-auto px-4 pb-8">
+        <div className="grid lg:grid-cols-12 gap-8">
+          <div className="relative lg:col-span-5 rounded-lg overflow-hidden">
+            <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 pt-1">
+              <div className="space-y-6">
+                <PersonalInfoForm
+                  data={resumeData.personal_info}
+                  onChange={(data) =>
+                    setResumeData((prev) => ({
+                      ...prev,
+                      personal_info: data,
+                    }))
+                  }
+                  removeBackground={removeBackground}
+                  setRemoveBackground={setRemoveBackground}
+                />
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );
