@@ -17,6 +17,9 @@ import {
   Award,
 } from "lucide-react";
 import PersonalInfoForm from "../components/PersonalInfoForm";
+import TemplateSelector from "../components/TemplateSelector";
+import ColorPicker from "../components/ColorPicker";
+import ProfessionalSummaryForm from "../components/ProfessionalSummaryForm";
 
 const ResumeBuilder = () => {
   const [resumeData, setResumeData] = useState({
