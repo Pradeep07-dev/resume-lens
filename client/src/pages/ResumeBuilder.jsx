@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import {
   ArrowLeftIcon,
   Briefcase,
@@ -25,10 +25,14 @@ import ExperienceForm from "../components/ExperienceForm";
 import EducationForm from "../components/EducationForm";
 import ProjectForm from "../components/ProjectForm";
 import SkillsForm from "../components/SkillsForm";
+import { useSelector } from "react-redux";
+import api from "../configs/api";
+import toast from "react-hot-toast";
 import CertificationForm from "../components/CertificationForm";
 
 const ResumeBuilder = () => {
-  const resumeId = 1;
+  const { resumeId } = useParams();
+  const { token } = useSelector((state) => state.auth);
 
   const [resumeData, setResumeData] = useState({
     _id: "",
@@ -58,6 +62,21 @@ const ResumeBuilder = () => {
 
   const activeSection = sections[activeSectionIndex];
 
+  const loadExistingResume = async () => {
+    try {
+      const { data } = await api.get("/api/resumes/get/" + resumeId, {
+        headers: { Authorization: token },
+      });
+
+      if (data.resume) {
+        setResumeData(data.resume);
+        document.title = data.resume.title;
+      }
+    } catch (error) {
+      console.error("Error saving resume:", error);
+    }
+  };
+
   const changeResumeVisibility = async () => {
     try {
       const formData = new FormData();
@@ -67,7 +86,13 @@ const ResumeBuilder = () => {
         JSON.stringify({ public: !resumeData.public })
       );
 
+      const { data } = await api.put("/api/resumes/update", formData, {
+        headers: { Authorization: token },
+      });
+
       setResumeData({ ...resumeData, public: !resumeData.public });
+
+      toast.success(data.message);
     } catch (error) {
       console.error("Error saving resume:", error);
     }
@@ -80,6 +105,7 @@ const ResumeBuilder = () => {
     if (navigator.clipboard) {
       try {
         await navigator.clipboard.writeText(resumeUrl);
+        toast.success("Link copied to clipboard!");
         return;
       } catch (err) {
         console.error("Clipboard failed:", err);
@@ -88,6 +114,8 @@ const ResumeBuilder = () => {
 
     if (navigator.share) {
       navigator.share({ url: resumeUrl, title: "My Resume" });
+    } else {
+      toast.error("Could not copy link. URL: " + resumeUrl);
     }
   };
 
@@ -111,7 +139,12 @@ const ResumeBuilder = () => {
       typeof resumeData.personal_info.image === "object" &&
         formData.append("image", resumeData.personal_info.image);
 
+      const { data } = await api.put("/api/resumes/update", formData, {
+        headers: { Authorization: token },
+      });
+
       setResumeData(data.resume);
+      toast.success(data.message);
     } catch (error) {
       console.error("Error saving resume:", error);
     }
