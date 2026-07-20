@@ -1,6 +1,8 @@
 import {
   BriefcaseBusiness,
+  // Github,
   Globe,
+  // Linkedin,
   Mail,
   MapPin,
   Phone,

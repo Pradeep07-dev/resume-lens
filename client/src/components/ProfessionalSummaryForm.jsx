@@ -1,16 +1,29 @@
 import { Loader2, Sparkles } from "lucide-react";
 import React, { useState } from "react";
+import { useSelector } from "react-redux";
+import api from "../configs/api";
 
 const ProfessionalSummaryForm = ({ data, onChange, setResumeDate }) => {
+  const { token } = useSelector((state) => state.auth);
   const [isGenerating, setIsGenerating] = useState(false);
 
   const generateSummary = async () => {
     try {
       setIsGenerating(true);
+      const prompt = `enhance my professional summary "${data}"`;
 
-      setResumeDate(data);
+      const response = await api.post(
+        "/api/ai/enhance-pro-sum",
+        { userContent: prompt },
+        { headers: { Authorization: token } }
+      );
+
+      setResumeDate((prev) => ({
+        ...prev,
+        professional_summary: response.data.enhancedContent,
+      }));
     } catch (error) {
-      console.log(error.message);
+      toast.error(error?.response?.data?.message || error.message);
     } finally {
       setIsGenerating(false);
     }

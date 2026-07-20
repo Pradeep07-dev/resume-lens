@@ -1,8 +1,55 @@
 import { Briefcase, Loader2, Plus, Sparkles, Trash2 } from "lucide-react";
 import { useState } from "react";
+import { useSelector } from "react-redux";
+import api from "../configs/api";
+import toast from "react-hot-toast";
 
 const ExperienceForm = ({ data, onChange }) => {
+  const { token } = useSelector((state) => state.auth);
   const [generatingIndex, setGeneratingIndex] = useState(-1);
+
+  const addExperience = () => {
+    const newExperience = {
+      company: "",
+      position: "",
+      start_date: "",
+      end_date: "",
+      description: "",
+      is_current: false,
+    };
+    onChange([...data, newExperience]);
+  };
+
+  const removeExperience = (index) => {
+    const updated = data.filter((_, i) => i !== index);
+    onChange(updated);
+  };
+
+  const updateExperience = (index, field, value) => {
+    const updated = [...data];
+    updated[index] = { ...updated[index], [field]: value };
+    onChange(updated);
+  };
+
+  const generateDescription = async (index) => {
+    setGeneratingIndex(index);
+    const experience = data[index];
+    const prompt = `enhance this job description ${experience.description} for the position of ${experience.position} at ${experience.company}.`;
+
+    try {
+      const { data } = await api.post(
+        "/api/ai/enhance-job-desc",
+        { userContent: prompt },
+        { headers: { Authorization: token } }
+      );
+
+      updateExperience(index, "description", data.enhancedContent);
+    } catch (error) {
+      toast.error(error.message);
+    } finally {
+      setGeneratingIndex(-1);
+    }
+  };
 
   return (
     <div className="space-y-6">
@@ -14,7 +61,10 @@ const ExperienceForm = ({ data, onChange }) => {
           <p className="text-sm text-gray-500">Add your job experience</p>
         </div>
 
-        <button className="flex items-center gap-2 px-3 py-2 text-sm bg-green-100 text-green-700 rounded-lg hover:bg-green-200 transition-colors">
+        <button
+          onClick={addExperience}
+          className="flex items-center gap-2 px-3 py-2 text-sm bg-green-100 text-green-700 rounded-lg hover:bg-green-200 transition-colors"
+        >
           <Plus className="size-4" />
           Add Experience
         </button>
@@ -35,7 +85,10 @@ const ExperienceForm = ({ data, onChange }) => {
             >
               <div className="flex justify-between items-start">
                 <h4>Experience #{index + 1}</h4>
-                <button className="text-red-500 hover:text-red-700 transition-colors">
+                <button
+                  className="text-red-500 hover:text-red-700 transition-colors"
+                  onClick={() => removeExperience(index)}
+                >
                   <Trash2 className="size-4" />
                 </button>
               </div>
@@ -43,27 +96,35 @@ const ExperienceForm = ({ data, onChange }) => {
               <div className="grid md:grid-cols-2 gap-3">
                 <input
                   value={experience.company || ""}
-                  onChange={(e) => e.target.value}
+                  onChange={(e) =>
+                    updateExperience(index, "company", e.target.value)
+                  }
                   type="text"
                   placeholder="Company Name"
                   className=" px-3 py-2 text-sm rounded-lg"
                 />
                 <input
                   value={experience.position || ""}
-                  onChange={(e) => e.target.value}
+                  onChange={(e) =>
+                    updateExperience(index, "position", e.target.value)
+                  }
                   type="text"
                   placeholder="Job Title"
                   className=" px-3 py-2 text-sm rounded-lg"
                 />
                 <input
                   value={experience.start_date || ""}
-                  onChange={(e) => e.target.value}
+                  onChange={(e) =>
+                    updateExperience(index, "start_date", e.target.value)
+                  }
                   type="month"
                   className=" px-3 py-2 text-sm rounded-lg"
                 />
                 <input
                   value={experience.end_date || ""}
-                  onChange={(e) => e.target.value}
+                  onChange={(e) =>
+                    updateExperience(index, "end_date", e.target.value)
+                  }
                   type="month"
                   disabled={experience.is_current}
                   className=" px-3 py-2 text-sm rounded-lg disabled:bg-gray-100"
@@ -75,7 +136,11 @@ const ExperienceForm = ({ data, onChange }) => {
                   type="checkbox"
                   checked={experience.is_current || false}
                   onChange={(e) => {
-                    e.target.checked;
+                    updateExperience(
+                      index,
+                      "is_current",
+                      e.target.checked ? true : false
+                    );
                   }}
                   className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
                 />
@@ -89,6 +154,7 @@ const ExperienceForm = ({ data, onChange }) => {
                   <label className="text-sm font-medium">Job Description</label>
                   <button
                     className="flex items-center gap-1 px-2 py-1 text-sm bg-purple-100 text-purple-700 rounded hover:bg-purple-200 transition-colors disabled:opacity-50"
+                    onClick={() => generateDescription(index)}
                     disabled={
                       generatingIndex === index ||
                       !experience.position ||
@@ -109,7 +175,9 @@ const ExperienceForm = ({ data, onChange }) => {
                 <textarea
                   value={experience.description || ""}
                   rows={4}
-                  onChange={(e) => e.target.value}
+                  onChange={(e) =>
+                    updateExperience(index, "description", e.target.value)
+                  }
                   className="w-full text-sm px-3 py-2 rounded-lg resize-none"
                   placeholder="Describe your key responsibilities and achievements..."
                 />

@@ -1,7 +1,18 @@
 import { Lock, Mail, User2Icon } from "lucide-react";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
+import { useDispatch } from "react-redux";
+import api from "../configs/api";
+import { login } from "../app/features/authSlice";
+import toast from "react-hot-toast";
 
 const Login = () => {
+  const query = new URLSearchParams(window.location.search);
+  const urlState = query.get("state");
+  const [state, setState] = useState(urlState || "login");
+
+  const dispatch = useDispatch();
+
   const {
     register,
     handleSubmit,
@@ -11,17 +22,21 @@ const Login = () => {
 
   const onSubmit = async (formData) => {
     try {
-      console.log(formData);
+      const { data } = await api.post(`/api/users/${state}`, formData);
+
+      dispatch(login(data));
+
+      localStorage.setItem("token", data.token);
+
+      toast.success(data.message);
     } catch (error) {
-      console.log(error);
+      toast.error(error?.response?.data?.message || error.message);
     }
   };
 
-  const state = "login";
-
   const handleToggle = () => {
     const newState = state === "login" ? "register" : "login";
-
+    setState(newState);
     reset();
     window.history.pushState({}, "", `/app?state=${newState}`);
   };

@@ -79,16 +79,16 @@ const ProjectForm = ({ data, onChange }) => {
               placeholder="Project Link"
               className=" px-3 py-2 text-sm rounded-lg w-full"
             />
-            <textarea
-              value={project.description || ""}
-              onChange={(e) =>
-                updateProject(index, "description", e.target.value)
-              }
-              type="text"
-              rows={4}
-              placeholder="Describe your project..."
-              className=" px-3 py-2 text-sm rounded-lg resize-none w-full"
-            />
+              <textarea
+                value={project.description || ""}
+                onChange={(e) =>
+                  updateProject(index, "description", e.target.value)
+                }
+                type="text"
+                rows={4}
+                placeholder="Describe your project..."
+                className=" px-3 py-2 text-sm rounded-lg resize-none w-full"
+              />
           </div>
         ))}
       </div>

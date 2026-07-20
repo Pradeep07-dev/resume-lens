@@ -1,17 +1,20 @@
 import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 import ResumePreview from "../components/ResumePreview";
-import { ArrowLeft } from "lucide-react";
-import Loader from "../components/Loader";
+import { ArrowLeft, Loader } from "lucide-react";
+import api from "../configs/api";
 
 const Preview = () => {
-  const resumeId = 1;
+  const { resumeId } = useParams();
 
   const [resumeData, setResumeData] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
 
   const loadResume = async () => {
     try {
-      setResumeData(data.find(resumeId));
+      const { data } = await api.get("/api/resumes/public/" + resumeId);
+
+      setResumeData(data.resume);
     } catch (error) {
       console.log(error.message);
     } finally {
